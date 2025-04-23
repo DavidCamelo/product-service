@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
             try {
                 return restClientBuilder.build()
                         .get()
-                        .uri("http://user-service/{id}", id)
+                        .uri("http://user/{id}", id)
                         .exchange((request, response) -> {
                             if (response.getStatusCode().isError()) {
                                 throw new ProductException(objectMapper.readValue(response.getBody(), ErrorDTO.class));
