@@ -2,6 +2,7 @@ package com.davidcamelo.product.service.impl;
 
 import com.davidcamelo.product.dto.ErrorDTO;
 import com.davidcamelo.product.dto.ProductDTO;
+import com.davidcamelo.product.dto.UserDTO;
 import com.davidcamelo.product.entity.Product;
 import com.davidcamelo.product.error.ProductException;
 import com.davidcamelo.product.repository.ProductRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void map(ProductDTO productDTO, Product product) {
-        product.setUserId(productDTO.user() != null ? productDTO.user().id() : null);
+        product.setUserId(Optional.ofNullable(productDTO.user()).map(UserDTO::id).orElse(null));
         product.setName(productDTO.name());
         product.setDescription(productDTO.description());
     }

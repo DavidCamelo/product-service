@@ -8,9 +8,7 @@ import lombok.Builder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record UserDTO(
         Long id,
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         String name,
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         String lastName,
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         ErrorDTO error
