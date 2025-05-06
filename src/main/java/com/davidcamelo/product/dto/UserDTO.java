@@ -7,7 +7,6 @@ import lombok.Builder;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record UserDTO(
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         Long id,
         String name,
         String lastName,
