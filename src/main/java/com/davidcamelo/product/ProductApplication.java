@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Slf4j
 @SpringBootApplication
 @OpenAPIDefinition(
-		servers = { @Server(url = "/product", description = "Product Service URL"), @Server(url = "/", description = "Default Server") },
+		servers = { @Server(url = "/products", description = "Product Service URL"), @Server(url = "/", description = "Default Server") },
 		info = @Info(title = "OpenAPI definition", version = "v0"))
 public class ProductApplication {
 

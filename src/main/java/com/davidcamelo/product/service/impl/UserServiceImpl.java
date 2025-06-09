@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final RestClientUtil<UserDTO> restClientUtil;
-    private static final String USER_SERVICE = "user";
+    private static final String USER_SERVICE = "users";
 
     @Override
     public UserDTO create(UserDTO userDTO) {
