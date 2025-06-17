@@ -1,5 +1,6 @@
 package com.davidcamelo.product.service.impl;
 
+import com.davidcamelo.product.dto.RestClientResponse;
 import com.davidcamelo.product.dto.UserDTO;
 import com.davidcamelo.product.error.ProductException;
 import com.davidcamelo.product.service.UserService;
@@ -20,20 +21,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO create(UserDTO userDTO) {
-        var response = restClientUtil.create(USER_SERVICE, userDTO, UserDTO.class);
-        if (response.getDTO() != null) {
-            return response.getDTO();
-        }
-        return UserDTO.builder().error(response.getErrorDTO()).build();
+        return handleResponse(restClientUtil.create(USER_SERVICE, userDTO, UserDTO.class));
     }
 
     @Override
     public UserDTO getById(Long id) {
-        var response = restClientUtil.getById(USER_SERVICE, id, UserDTO.class);
-        if (response.getDTO() != null) {
-            return response.getDTO();
+        if (id == null) {
+            return null;
         }
-        return UserDTO.builder().id(id).error(response.getErrorDTO()).build();
+        return handleResponse(restClientUtil.getById(USER_SERVICE, id, UserDTO.class));
     }
 
     @Override
@@ -45,23 +41,35 @@ public class UserServiceImpl implements UserService {
         if (response.getErrorDTO() != null) {
             return List.of(UserDTO.builder().error(response.getErrorDTO()).build());
         }
-        return new ArrayList<>();
+        return null;
     }
 
     @Override
     public UserDTO update(Long id, UserDTO userDTO) {
-        var response = restClientUtil.update(USER_SERVICE, id, userDTO, UserDTO.class);
-        if (response.getDTO() != null) {
-            return response.getDTO();
+        if (id == null) {
+            return null;
         }
-        return UserDTO.builder().error(response.getErrorDTO()).build();
+        return handleResponse(restClientUtil.update(USER_SERVICE, id, userDTO, UserDTO.class));
     }
 
     @Override
     public void delete(Long id) {
+        if (id == null) {
+            return;
+        }
         var response = restClientUtil.delete(USER_SERVICE, id);
         if (response.getErrorDTO() != null) {
             throw new ProductException(response.getErrorDTO());
         }
+    }
+
+    private UserDTO handleResponse(RestClientResponse<UserDTO> userResponse) {
+        if (userResponse.getDTO() != null) {
+            return userResponse.getDTO();
+        }
+        if (userResponse.getErrorDTO() != null) {
+            return UserDTO.builder().error(userResponse.getErrorDTO()).build();
+        }
+        return null;
     }
 }

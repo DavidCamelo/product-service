@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -71,6 +72,9 @@ public class RestClientUtil<T> {
     private ErrorDTO handleException(Exception ex) {
         if (ex instanceof HttpClientErrorException httpEx) {
             return httpEx.getResponseBodyAs(ErrorDTO.class);
+        } else if (ex instanceof RestClientException restClientEx) {
+            log.error("RestClientException {}",restClientEx.getMessage());
+            return null;
         }
         return ErrorDTO.builder().message(ex.getMessage()).timestamp(new Date()).build();
     }
