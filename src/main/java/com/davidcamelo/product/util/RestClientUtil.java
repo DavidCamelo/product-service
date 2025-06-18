@@ -1,17 +1,17 @@
 package com.davidcamelo.product.util;
 
 import com.davidcamelo.product.dto.ErrorDTO;
+import com.davidcamelo.product.dto.FilterDTO;
 import com.davidcamelo.product.dto.RestClientResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -39,10 +39,10 @@ public class RestClientUtil<T> {
         return restClientResponse;
     }
 
-    public RestClientResponse<List<T>> getAll(String service, Class<T[]> tClass) {
-        var restClientResponse = new RestClientResponse<List<T>>();
+    public RestClientResponse<Page<T>> getAll(String service, FilterDTO filterDTO, Class<Page> tClass) {
+        var restClientResponse = new RestClientResponse<Page<T>>();
         try {
-            restClientResponse.setDTO(Arrays.asList(restClientBuilder.build().get().uri("http://{service}", service).retrieve().body(tClass)));
+            restClientResponse.setDTO(restClientBuilder.build().get().uri("http://{service}", service).retrieve().body(tClass));
         } catch (Exception ex) {
             restClientResponse.setErrorDTO(handleException(ex));
         }

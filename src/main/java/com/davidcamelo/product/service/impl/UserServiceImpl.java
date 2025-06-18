@@ -1,5 +1,6 @@
 package com.davidcamelo.product.service.impl;
 
+import com.davidcamelo.product.dto.FilterDTO;
 import com.davidcamelo.product.dto.RestClientResponse;
 import com.davidcamelo.product.dto.UserDTO;
 import com.davidcamelo.product.error.ProductException;
@@ -7,9 +8,10 @@ import com.davidcamelo.product.service.UserService;
 import com.davidcamelo.product.util.RestClientUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -33,13 +35,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getAll() {
-        var response = restClientUtil.getAll(USER_SERVICE, UserDTO[].class);
+    public Page<UserDTO> getAll(FilterDTO filterDTO) {
+        var response = restClientUtil.getAll(USER_SERVICE, filterDTO, Page.class);
         if (response.getDTO() != null) {
             return response.getDTO();
         }
         if (response.getErrorDTO() != null) {
-            return List.of(UserDTO.builder().error(response.getErrorDTO()).build());
+            var errorList = List.of(UserDTO.builder().error(response.getErrorDTO()).build());
+            return new PageImpl<>(errorList);
         }
         return null;
     }

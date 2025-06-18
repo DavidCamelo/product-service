@@ -6,6 +6,7 @@ import com.davidcamelo.product.entity.Product;
 import com.davidcamelo.product.service.UserService;
 import com.davidcamelo.product.util.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -30,5 +31,10 @@ public class ProductMapperImpl implements ProductMapper {
         product.setUserId(Optional.ofNullable(productDTO.user()).map(UserDTO::id).orElse(null));
         product.setName(productDTO.name());
         product.setDescription(productDTO.description());
+    }
+
+    @Override
+    public Page<ProductDTO> mapPage(Page<Product> productPage) {
+        return productPage.map(this::map);
     }
 }

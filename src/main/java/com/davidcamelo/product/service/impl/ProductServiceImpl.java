@@ -1,6 +1,7 @@
 package com.davidcamelo.product.service.impl;
 
 import com.davidcamelo.product.dto.ErrorDTO;
+import com.davidcamelo.product.dto.FilterDTO;
 import com.davidcamelo.product.dto.ProductDTO;
 import com.davidcamelo.product.entity.Product;
 import com.davidcamelo.product.error.ProductException;
@@ -8,10 +9,13 @@ import com.davidcamelo.product.repository.ProductRepository;
 import com.davidcamelo.product.service.ProductService;
 import com.davidcamelo.product.util.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +34,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getAll() {
-        return productRepository.findAll().stream().map(productMapper::map).toList();
+    public Page<ProductDTO> getAll(FilterDTO filterDTO) {
+        if (filterDTO.getPageNumber() != null && filterDTO.getPageSize() != null) {
+            var pageRequest = PageRequest.of(filterDTO.getPageNumber(), filterDTO.getPageSize(), Sort.by(new Sort.Order(filterDTO.getSortDirection(), filterDTO.getSortBy())));
+            return productMapper.mapPage(productRepository.findAll(pageRequest));
+        }
+        var users = productRepository.findAll().stream().map(productMapper::map).toList();
+        return new PageImpl<>(users, PageRequest.of(0, users.size()), users.size());
     }
 
     @Override
