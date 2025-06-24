@@ -39,8 +39,8 @@ public class ProductServiceImpl implements ProductService {
             var pageRequest = PageRequest.of(filterDTO.getPageNumber(), filterDTO.getPageSize(), Sort.by(new Sort.Order(filterDTO.getSortDirection(), filterDTO.getSortBy())));
             return productMapper.mapPage(productRepository.findAll(pageRequest));
         }
-        var users = productRepository.findAll().stream().map(productMapper::map).toList();
-        return new PageImpl<>(users, PageRequest.of(0, users.size()), users.size());
+        var products = productRepository.findAll().stream().map(productMapper::map).toList();
+        return new PageImpl<>(products, PageRequest.of(0, products.size()), products.size());
     }
 
     @Override
