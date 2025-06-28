@@ -22,7 +22,7 @@ public class RestClientUtil<T> {
     public RestClientResponse<T> create(String service, T dto, Class<T> tClass) {
         var restClientResponse = new RestClientResponse<T>();
         try {
-            restClientResponse.setDTO(restClientBuilder.build().post().uri("http://{service}", service).body(dto).retrieve().body(tClass));
+            restClientResponse.setDTO(restClientBuilder.build().post().uri("http://{service}/api/{service}", service, service).body(dto).retrieve().body(tClass));
         } catch (Exception ex) {
             restClientResponse.setErrorDTO(handleException(ex));
         }
@@ -32,7 +32,7 @@ public class RestClientUtil<T> {
     public RestClientResponse<T> getById(String service, Long id, Class<T> tClass) {
         var restClientResponse = new RestClientResponse<T>();
         try {
-            restClientResponse.setDTO(restClientBuilder.build().get().uri("http://{service}/{id}", service, id).retrieve().body(tClass));
+            restClientResponse.setDTO(restClientBuilder.build().get().uri("http://{service}/api/{service}/{id}", service, service, id).retrieve().body(tClass));
         } catch (Exception ex) {
             restClientResponse.setErrorDTO(handleException(ex));
         }
@@ -42,7 +42,7 @@ public class RestClientUtil<T> {
     public RestClientResponse<Page<T>> getAll(String service, FilterDTO filterDTO, Class<Page> tClass) {
         var restClientResponse = new RestClientResponse<Page<T>>();
         try {
-            restClientResponse.setDTO(restClientBuilder.build().get().uri("http://{service}", service).retrieve().body(tClass));
+            restClientResponse.setDTO(restClientBuilder.build().get().uri("http://{service}/api/{service}", service, service).retrieve().body(tClass));
         } catch (Exception ex) {
             restClientResponse.setErrorDTO(handleException(ex));
         }
@@ -52,7 +52,7 @@ public class RestClientUtil<T> {
     public RestClientResponse<T> update(String service, Long id, T dto, Class<T> tClass) {
         var restClientResponse = new RestClientResponse<T>();
         try {
-            restClientResponse.setDTO(restClientBuilder.build().put().uri("http://{service}/{id}", service, id).body(dto).retrieve().body(tClass));
+            restClientResponse.setDTO(restClientBuilder.build().put().uri("http://{service}/api/{service}/{id}", service, service, id).body(dto).retrieve().body(tClass));
         } catch (Exception ex) {
             restClientResponse.setErrorDTO(handleException(ex));
         }
@@ -62,7 +62,7 @@ public class RestClientUtil<T> {
     public RestClientResponse<T> delete(String service, Long id) {
         var restClientResponse = new RestClientResponse<T>();
         try {
-            restClientBuilder.build().delete().uri("http://{service}/{id}", service, id).retrieve().toBodilessEntity();
+            restClientBuilder.build().delete().uri("http://{service}/api/{service}/{id}", service, service, id).retrieve().toBodilessEntity();
         } catch (Exception ex) {
             restClientResponse.setErrorDTO(handleException(ex));
         }
@@ -71,7 +71,11 @@ public class RestClientUtil<T> {
 
     private ErrorDTO handleException(Exception ex) {
         if (ex instanceof HttpClientErrorException httpEx) {
-            return httpEx.getResponseBodyAs(ErrorDTO.class);
+            try {
+                return httpEx.getResponseBodyAs(ErrorDTO.class);
+            } catch (Exception e) {
+                log.error("Error parsing HttpClientErrorException response: {}", e.getMessage());
+            }
         } else if (ex instanceof RestClientException restClientEx) {
             log.error("RestClientException {}",restClientEx.getMessage());
             return null;
