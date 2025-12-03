@@ -6,8 +6,10 @@ import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.service.registry.ImportHttpServices;
 
 @Slf4j
+//@ImportHttpServices(basePackages = "com.davidcamelo")
 @SpringBootApplication
 @OpenAPIDefinition(
         servers = { @Server(url = "/products", description = "Product Service URL"), @Server(url = "/", description = "Default Server") },
