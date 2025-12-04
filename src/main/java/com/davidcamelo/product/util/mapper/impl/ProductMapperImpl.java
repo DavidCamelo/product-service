@@ -4,6 +4,7 @@ import com.davidcamelo.product.dto.ProductDTO;
 import com.davidcamelo.product.dto.UserDTO;
 import com.davidcamelo.product.entity.Product;
 import com.davidcamelo.product.service.UserService;
+import com.davidcamelo.product.util.http.UserClient;
 import com.davidcamelo.product.util.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

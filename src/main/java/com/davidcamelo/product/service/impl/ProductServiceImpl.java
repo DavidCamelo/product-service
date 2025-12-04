@@ -4,7 +4,7 @@ import com.davidcamelo.product.dto.ErrorDTO;
 import com.davidcamelo.product.dto.FilterDTO;
 import com.davidcamelo.product.dto.ProductDTO;
 import com.davidcamelo.product.entity.Product;
-import com.davidcamelo.product.error.ProductException;
+import com.davidcamelo.product.error.ProductNotFoundException;
 import com.davidcamelo.product.repository.ProductRepository;
 import com.davidcamelo.product.service.ProductService;
 import com.davidcamelo.product.util.mapper.ProductMapper;
@@ -59,6 +59,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Product findById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new ProductException(ErrorDTO.builder().message(String.format("Product with id %s not found", id)).timestamp(new Date()).build()));
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(ErrorDTO.builder().message(String.format("Product with id %s not found", id)).timestamp(new Date()).build()));
     }
 }

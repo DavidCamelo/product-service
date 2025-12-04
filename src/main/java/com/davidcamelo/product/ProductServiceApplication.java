@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.service.registry.ImportHttpServices;
 
 @Slf4j
-//@ImportHttpServices(basePackages = "com.davidcamelo")
+@ImportHttpServices(basePackages = "com.davidcamelo")
 @SpringBootApplication
 @OpenAPIDefinition(
         servers = { @Server(url = "/products", description = "Product Service URL"), @Server(url = "/", description = "Default Server") },

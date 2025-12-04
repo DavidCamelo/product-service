@@ -12,8 +12,8 @@ import java.util.Date;
 @RestControllerAdvice(assignableTypes = { ProductController.class })
 public class ProductControllerAdvice {
 
-    @ExceptionHandler(value = { ProductException.class })
-    public ResponseEntity<ErrorDTO> handleProductException(ProductException ex) {
+    @ExceptionHandler(value = { ProductNotFoundException.class })
+    public ResponseEntity<ErrorDTO> handleProductException(ProductNotFoundException ex) {
         return new ResponseEntity<>(ErrorDTO.builder().message(ex.getMessage()).timestamp(new Date()).build(), HttpStatus.NOT_FOUND);
     }
 }
